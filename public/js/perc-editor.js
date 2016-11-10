@@ -1,5 +1,20 @@
 (function () {
 
+  // == JQUERY functions ===============
+
+  // find all attrs with certain prefix
+  $.expr[':'].hasAttrWithPrefix = $.expr.createPseudo(function (prefix) {
+    return function (obj) {
+      for (var i = 0; i < obj.attributes.length; i++) {
+        if (obj.attributes[i].nodeName.indexOf(prefix) === 0) return true;
+      }
+      return false;
+    };
+  });
+
+  // == PostMessage ====================
+
+  // Handle message received
   function receiveMessage(event) {
     var allowedDomains = ['http://localhost:9001'],
       msgKey = 'perc-editor-msg',
@@ -40,11 +55,15 @@
 
       // Only handle messages we care about
       if (messageName === msgKey) {
-        // For display purposes
-        $('#messages').text(JSON.stringify(parsedData));
 
-        // Let sender know we received message
-        sendMessage('ACK');
+        // Toggle edit mode
+        if (parsedData.data.editMode) {
+          // show borders around editable things
+          $('*:hasAttrWithPrefix(data-perc-edit)').css('border', '1px dashed red');
+        } else {
+          // turn off borders
+          $('*:hasAttrWithPrefix(data-perc-edit)').css('border', 'none');
+        }
       }
     }
   }
