@@ -1,77 +1,41 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>{{title }}</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/ie10-viewport-bug-workaround.css"/>
+    <link rel="stylesheet" href="/css/jumbotron.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   {{#if ENV_DEVELOPMENT}}
       <script src="http://localhost:35729/livereload.js"></script>
   {{/if}}
-
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
-            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-            crossorigin="anonymous"></script>
-    <script>
-        $(function () {
-            function receiveMessage(event) {
-                var allowedDomains = ['http://localhost:9001'],
-                        msgKey = 'perc-editor-msg',
-                        origin = event.origin || (event.originalEvent && event.originalEvent.origin) || null,
-                        data = event.data || (event.originalEvent && event.originalEvent.data) || 'null',
-                        sendMessage = function (data) {
-                            var payload = {
-                                messageName: msgKey,
-                                ts: (new Date()).getTime(),
-                                data: data
-                            };
-                            event.source.postMessage(payload, origin);
-                        },
-                        parseData = function (data) {
-                            if (!data || typeof data !== 'string') {
-                                return {};
-                            }
-
-                            var parts = data.split(/:(.+)/);
-                            return {
-                                messageName: parts[0],
-                                data: JSON.parse(parts[1])
-                            };
-                        };
-
-                if (allowedDomains.indexOf(origin) === -1) {
-                    var msg = 'The domain ' + origin + ' must be explicitly allowed.';
-                    console.log(msg);
-                    sendMessage(msg);
-                    return;
-                } else {
-                    // OK to process message...
-                    console.log('Published page received message: ', origin);
-
-                    // Parse the message
-                    var parsedData = typeof data === 'string' ? parseData(data) : data;
-                    var messageName = parsedData.messageName || parsedData.message;
-
-                    // Only handle messages we care about
-                    if (messageName === msgKey) {
-                        // For display purposes
-                        $('#messages').text(JSON.stringify(parsedData));
-
-                        // Let sender know we received message
-                        sendMessage('ACK');
-                    }
-                }
-            }
-
-            // Listen for messages
-            window.addEventListener("message", receiveMessage, false);
-        });
-    </script>
-
 </head>
 <body>
 
 {{{body}}}
+
+<!-- JQUERY -->
+<script src="//code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<!-- BOOTSTRAP CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- BOOTSTRAP JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<!-- TINY-MCE -->
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<!-- OUR SCRIPT -->
+<script src="js/perc-editor.js"></script>
 
 </body>
 </html>

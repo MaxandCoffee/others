@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+.avatar {
+  width: 96px;
+  margin-bottom: 1em;
+}
