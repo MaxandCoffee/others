@@ -80,7 +80,7 @@
           function color() {
             $.each(colors, function (index, color) {
               setTimeout(function () {
-                editableItem.css({'background': color, 'border-radius' : '4px', 'border' : '2px dotted #b2e4ef'});
+                editableItem.css({'background': color});
               }, 90 * index);
             });
           }
@@ -116,11 +116,11 @@
 
           $(editableItem).each(function(){
             var item = $(this);
-            var oldText = $(this).text();
+            var oldText = $(this).html();
             $(item).one('focus', function () {
               var itemContainer = $(this).parent().attr('data-perc-id');
               var beingEdited = $(this)[0].tagName.toLocaleLowerCase();
-              var oldText = $(this).text();
+              var oldText = $(this).html();
               console.log(itemContainer + "'s " + beingEdited + ' is being edited. The orginial value is ' + oldText);
             });
             $(item).on('blur', function(){
@@ -129,7 +129,7 @@
 
               var itemEdited = itemContainer + ": " + edited;
 
-              var newText = $(this).text();
+              var newText = $(this).html();
               if(newText != oldText) {
                 var editMsg = itemContainer + "'s " + edited + ' was edited. The original value was '+ oldText + ' The new value is ' + newText
                 console.log(editMsg);
@@ -143,7 +143,6 @@
           })
         } else {
           // turn off borders
-          $(editableItem).css('border', 'none');
           $(editableItem).removeClass('e');
           $(editableItem).removeAttr('contenteditable');
           tinymce.EditorManager.editors = [];
