@@ -1,6 +1,5 @@
 var PercEditor = (function () {
 
-
   var editableItem,
     svc = {},
     attr = 'data-perc-id',
@@ -44,10 +43,10 @@ var PercEditor = (function () {
         'advlist autolink lists link image charmap print preview hr anchor pagebreak',
         'searchreplace wordcount visualblocks visualchars code fullscreen',
         'insertdatetime media nonbreaking save table contextmenu directionality',
-        'emoticons template paste textcolor colorpicker textpattern imagetools codesample'
+        'emoticons template paste textcolor colorpicker textpattern imagetools codesample pgImage'
       ],
       toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-      toolbar2: 'print preview media | forecolor backcolor emoticons | codesample',
+      toolbar2: 'print preview media | forecolor backcolor emoticons | codesample | pgImage',
       image_advtab: true,
       templates: [
         { title: 'Test template 1', content: 'Test 1' },
@@ -72,21 +71,21 @@ var PercEditor = (function () {
       setEditors();
 
       $(editableItem).each(function () {
-        var item = $(this),
-          oldText = $(this).html();
+        var originalText = $(this).html(),
+          item = $(this);
         $(item).one('focus', function () {
           var itemContainer = $(this).parent().attr(attr),
             beingEdited = $(this)[0].tagName.toLocaleLowerCase(),
-            oldText = $(this).html();
-          console.log(itemContainer + '\'s ' + beingEdited + ' is being edited. The original value is ' + oldText);
+            originalText = $(this).html();
+          console.log(itemContainer + '\'s ' + beingEdited + ' is being edited. The original value is ' + originalText);
         });
         $(item).on('blur', function () {
           var itemContainer = $(this).parent().attr(attr),
             edited = $(this)[0].tagName.toLocaleLowerCase(),
             itemEdited = itemContainer + ": " + edited,
             newText = $(this).html();
-          if (newText != oldText) {
-            var editMsg = itemContainer + '\'s ' + edited + ' was edited. The original value was ' + oldText + ' The new value is ' + newText;
+          if (newText !== originalText) {
+            var editMsg = itemContainer + '\'s ' + edited + ' was edited. The original value was ' + originalText + ' The new value is ' + newText;
             console.log(editMsg);
             localStorage.setItem(itemEdited, newText);
             svc.sendMessage(editMsg);
@@ -101,6 +100,10 @@ var PercEditor = (function () {
       $(editableItem).removeAttr('contenteditable');
       tinymce.EditorManager.editors = [];
     }
+  };
+
+  svc.handlePhonegapImage = function (imageData) {
+    svc.trigger(document, svc.CUSTOM_EVENT_NAME, { type: 'pc-image-resp', data: imageData });
   };
 
   // == Private Methods ====================

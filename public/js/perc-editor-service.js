@@ -2,36 +2,16 @@ var PercEditorService = (function (svc) {
 
   var caller, origin,
     allowedDomains = ['http://localhost:9001', 'http://localhost:9000'],
-    messageKey = 'perc-editor-msg',
-    customEventKey = 'perc-editor';
+    ieVersion = function () {
+      var match = navigator.userAgent.match(/(?:MSIE |Trident\/.*; rv:)(\d+)/);
+      return match ? parseInt(match[1]) : undefined;
+    };
+
+  // == Public Variables =================
+  svc.MESSAGE_NAME = 'pf-editor-msg';
+  svc.CUSTOM_EVENT_NAME = 'pc-editor-evt';
 
   // == PRIVATE METHODS ====================
-
-  /**
-   * Handle our custom events
-   *
-   * Payload:
-   * detail: {type: String, data: String/Boolean/Integer/JSON}
-   *
-   * @param event
-   */
-  function onPercEditorEvent(event) {
-    console.log('PercEditorEvent was received', event.detail);
-    switch (event.detail.type) {
-      case 'example-request':
-        svc.trigger(document, customEventKey, {
-          type: '',
-          data: {}
-        });
-        break;
-      case 'example-resp':
-        svc.sendMessage(event.detail);
-        break;
-      default:
-        console.log('PercEditorEvent unknown event was received');
-        break;
-    }
-  };
 
   /**
    * Parse the incoming message and return json
@@ -53,11 +33,38 @@ var PercEditorService = (function (svc) {
   }
 
   /**
+   * Handle our custom events
+   *
+   * Payload:
+   * detail: {type: String, data: String/Boolean/Integer/JSON}
+   *
+   * @param event
+   */
+  function onPercEditorEvent(event) {
+    console.log('custom editor event received', event.detail);
+    switch (event.detail.type) {
+      case 'pc-image-req':
+        svc.sendMessage('pf-image-req', {});
+        // svc.trigger(document, svc.CUSTOM_EVENT_NAME, {
+        //   type: '',
+        //   data: {}
+        // });
+        break;
+      case 'example-resp':
+        // svc.sendMessage(event.detail);
+        break;
+      default:
+        // console.log('unknown custom editor event was received');
+        break;
+    }
+  }
+
+  /**
    * Handle the incoming message dispatching to handlers
    * @param event the incoming message
    */
   function onMessageReceived(event) {
-    var data, messageName, meta,
+    var data, name, meta,
       error = '',
       payload = event.data || (event.originalEvent && event.originalEvent.data) || 'null';
 
@@ -73,18 +80,21 @@ var PercEditorService = (function (svc) {
     } else {
       // origin allowed...
       data = typeof payload === 'string' ? parseData(payload) : payload;
-      messageName = data.messageName || data.message;
+      name = data.messageName || data.message;
 
       console.log('Published page received message: ', origin);
 
       // only handle messages with our key
-      if (messageName === messageKey) {
+      if (name === svc.MESSAGE_NAME) {
         meta = data.data;
 
         // dispatch message
         switch (meta.type) {
-          case 'editMode':
+          case 'pf-edit-mode':
             svc.toggleEditMode(meta.data);
+            break;
+          case 'pf-image-resp':
+            svc.handlePhonegapImage(meta.data);
             break;
         }
       }
@@ -138,7 +148,7 @@ var PercEditorService = (function (svc) {
    * Dispatch a custom event
    *
    * Example:
-   * trigger(document, customEventKey, {type: String, data: String/Boolean/Integer/JSON});
+   * trigger(document, event_name, {type: String, data: String/Boolean/Integer/JSON});
    *
    * @param el String dom element to bind event to (ie. document)
    * @param eventName String the name of the custom event
@@ -158,13 +168,15 @@ var PercEditorService = (function (svc) {
   /**
    * Send a message to calling window (usually parent of iframe)
    * The caller should be bound by init method
-   * @param msg String the message
+   * @param type String the type of message (used to signify the handler)
+   * @param data String|Object the message payload
    */
-  svc.sendMessage = function (msg) {
+  svc.sendMessage = function (type, data) {
     var payload = {
-      messageName: messageKey,
+      messageName: svc.MESSAGE_NAME,
       ts: (new Date()).getTime(),
-      detail: msg
+      type: type || 'perc-log-req',
+      data: data
     };
 
     if (caller && caller.postMessage) {
@@ -177,7 +189,7 @@ var PercEditorService = (function (svc) {
    */
   svc.init = function () {
     // listen for our custom events
-    svc.on(document, customEventKey, onPercEditorEvent);
+    svc.on(document, svc.CUSTOM_EVENT_NAME, onPercEditorEvent);
 
     // listen for window events
     setupWindowMessageListener();
