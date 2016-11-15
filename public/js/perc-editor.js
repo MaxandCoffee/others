@@ -23,7 +23,7 @@ var PercEditor = (function () {
   function setColors() {
     $.each(colors, function (index, color) {
       setTimeout(function () {
-        editableItem.css({ 'background': color });
+        editableItem.css({'background': color});
       }, 90 * index);
     });
   }
@@ -36,9 +36,10 @@ var PercEditor = (function () {
       menubar: false
     });
 
-    tinymce.EditorManager.init({
-      selector: 'p.e, article.e, aside.e',
+    tinymce.init({
+      selector: '.e',
       inline: true,
+      body_class: 'editedItem',
       plugins: [
         'advlist autolink lists link image charmap print preview hr anchor pagebreak',
         'searchreplace wordcount visualblocks visualchars code fullscreen',
@@ -49,9 +50,47 @@ var PercEditor = (function () {
       toolbar2: 'print preview media | forecolor backcolor emoticons | codesample | pgImage',
       image_advtab: true,
       templates: [
-        { title: 'Test template 1', content: 'Test 1' },
-        { title: 'Test template 2', content: 'Test 2' }
-      ]
+        {title: 'Test template 1', content: 'Test 1'},
+        {title: 'Test template 2', content: 'Test 2'}
+      ],
+
+      // setup: function (editor) {
+      //   editor.on('init', function () {
+      //     var item = tinyMCE.activeEditor.getElement(),
+      //       originalHtml = tinyMCE.activeEditor.getContent({format: 'raw'});
+      //     $(item).addClass('editedItem');
+      //     editor.on('blur', function () {
+      //       var newHtml = tinyMCE.activeEditor.getContent({format: 'raw'});
+      //       if (newHtml === originalHtml) {
+      //         $(item).addClass('ignore');
+      //       }
+      //     });
+      //   });
+      // }
+
+      // setup: function (editor) {
+      //   editor.on('Init', function () {
+      //     var originalText = tinyMCE.activeEditor.getContent({format: 'raw'});
+      //     editor.on('focus', function () {
+      //       var originalText = tinyMCE.activeEditor.getContent({format: 'raw'});
+      //       console.log(originalText);
+      //     });
+      //     editor.on('blur', function (e) {
+      //       var newText = tinyMCE.activeEditor.getContent({format: 'raw'}),
+      //         thisItem = tinymce.activeEditor.getAttrib('id','class');
+      //           //tinymce.activeEditor.getBody().firstChild.id,
+      //           //tinymce.activeEditor.selection.getNode().id;
+      //         alert(thisItem);
+      //         //parent = $(thisItem).parent();
+      //       console.log(newText);
+      //       if (newText !== originalText) {
+      //
+      //         //$(parent).addClass('editedItem');
+      //         //tinyMCE.activeEditor.dom.addClass(tinyMCE.activeEditor.dom.select('.e'), 'editedItem');
+      //       }
+      //     });
+      //   })
+      // }
     });
   }
 
@@ -65,35 +104,24 @@ var PercEditor = (function () {
       // turn on editing
       setColors();
 
+      $('body').append('<div id="editsToSend"></div>');
+
       $(editableItem).addClass('e');
       $(editableItem).attr('contenteditable', 'true');
 
-      setEditors();
+      $(editableItem).one('focus', function(){
+        var oldVal = $(this).html();
+        $(this).on('blur', function(){
+          newVal = $(this).html();
 
-      $(editableItem).each(function () {
-        var originalText = $(this).html(),
-          item = $(this);
-        $(item).one('focus', function () {
-          var itemContainer = $(this).parent().attr(attr),
-            beingEdited = $(this)[0].tagName.toLocaleLowerCase(),
-            originalText = $(this).html();
-          console.log(itemContainer + '\'s ' + beingEdited + ' is being edited. The original value is ' + originalText);
-        });
-        $(item).on('blur', function () {
-          var itemContainer = $(this).parent().attr(attr),
-            edited = $(this)[0].tagName.toLocaleLowerCase(),
-            itemEdited = itemContainer + ": " + edited,
-            newText = $(this).html();
-          if (newText !== originalText) {
-            var editMsg = itemContainer + '\'s ' + edited + ' was edited. The original value was ' + originalText + ' The new value is ' + newText;
-            console.log(editMsg);
-            localStorage.setItem(itemEdited, newText);
-            svc.sendMessage(editMsg);
-          } else {
-            console.log(itemContainer + '\'s ' + edited + ' was not changed');
+          if(newVal !== oldVal){
+            $(this).addClass('editedItem');
           }
-        });
-      });
+        })
+      })
+
+      setEditors(editableItem);
+
     } else {
       // turn off editing
       $(editableItem).removeClass('e');
@@ -103,7 +131,23 @@ var PercEditor = (function () {
   };
 
   svc.handlePhonegapImage = function (imageData) {
-    svc.trigger(document, svc.CUSTOM_EVENT_NAME, { type: 'pc-image-resp', data: imageData });
+    svc.trigger(document, svc.CUSTOM_EVENT_NAME, {type: 'pc-image-resp', data: imageData});
+  };
+
+  svc.handlePublish = function () {
+    $('.editedItem').each(function () {
+      var itemContainer = $(this).parent().attr(attr),
+        edited = $(this)[0].tagName.toLocaleLowerCase(),
+        newText = $(this).html(),
+        editMsg = itemContainer + '\'s ' + edited + ' was edited. The new value is ' + newText + '. ';
+      $('#editsToSend').append(editMsg);
+    });
+
+    var editsToSend = document.getElementById("editsToSend").innerHTML;
+
+    localStorage.setItem('final edits to publish: ', editsToSend);
+
+    svc.sendMessage('perc-log-pub', editsToSend);
   };
 
   // == Private Methods ====================

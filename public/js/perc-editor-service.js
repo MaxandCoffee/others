@@ -96,6 +96,9 @@ var PercEditorService = (function (svc) {
           case 'pf-image-resp':
             svc.handlePhonegapImage(meta.data);
             break;
+          case 'pf-publish':
+            svc.handlePublish(meta.data);
+            break;
         }
       }
     }
