@@ -39,15 +39,16 @@ var PercEditor = (function () {
     tinymce.EditorManager.init({
       selector: 'p.e, article.e, aside.e',
       inline: true,
+      file_browser_callback : $.noop,
       plugins: [
         'advlist autolink lists link image charmap print preview hr anchor pagebreak',
         'searchreplace wordcount visualblocks visualchars code fullscreen',
         'insertdatetime media nonbreaking save table contextmenu directionality',
-        'emoticons template paste textcolor colorpicker textpattern imagetools codesample pgImage'
+        'emoticons template paste textcolor colorpicker textpattern codesample percAdvImage'
       ],
       toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-      toolbar2: 'print preview media | forecolor backcolor emoticons | codesample | pgImage',
-      image_advtab: true,
+      toolbar2: 'print preview media | forecolor backcolor emoticons | codesample | percAdvImage',
+      //image_advtab: true,
       templates: [
         { title: 'Test template 1', content: 'Test 1' },
         { title: 'Test template 2', content: 'Test 2' }
@@ -107,6 +108,22 @@ var PercEditor = (function () {
   };
 
   // == Private Methods ====================
+
+  // perc alerts
+  jQuery.fn.extend({
+    alert: function (title, message) {
+      if ($(this).hasClass('perc-alert')) {
+        if (title && message) {
+          $(this).append('<strong>' + title + '</strong>').append(' ' + message);
+        } else if (title) {
+          $(this).append(title);
+        } else {
+          $(this).append(message);
+        }
+      }
+      return $(this);
+    }
+  });
 
   // find all attrs with certain prefix
   $.expr[':'].hasAttrWithPrefix = $.expr.createPseudo(function (prefix) {

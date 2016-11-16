@@ -7,7 +7,8 @@ var PercEditorService = (function (svc) {
       return match ? parseInt(match[1]) : undefined;
     };
 
-  // == Public Variables =================
+  // == PUBLIC VARIABLES =================
+
   svc.MESSAGE_NAME = 'pf-editor-msg';
   svc.CUSTOM_EVENT_NAME = 'pc-editor-evt';
 
@@ -60,6 +61,28 @@ var PercEditorService = (function (svc) {
   }
 
   /**
+   * Dispatch messages that come from parent page (via window.postMessage)
+   * @param name the message name
+   * @param data the message payload
+   */
+  function dispatchMessage(name, data) {
+    // only handle messages with our key
+    if (name === svc.MESSAGE_NAME) {
+      meta = data.data;
+
+      // dispatch message
+      switch (meta.type) {
+        case 'pf-edit-mode':
+          svc.toggleEditMode(meta.data);
+          break;
+        case 'pf-image-resp':
+          svc.handlePhonegapImage(meta.data);
+          break;
+      }
+    }
+  }
+
+  /**
    * Handle the incoming message dispatching to handlers
    * @param event the incoming message
    */
@@ -74,7 +97,7 @@ var PercEditorService = (function (svc) {
 
     if (allowedDomains.indexOf(origin) === -1) {
       // origin not allowed...
-      error = 'The domain ' + origin + ' must be explicitly allowed.';
+      error = 'the domain ' + origin + ' must be explicitly allowed.';
       console.log(error);
       send(error);
     } else {
@@ -82,26 +105,16 @@ var PercEditorService = (function (svc) {
       data = typeof payload === 'string' ? parseData(payload) : payload;
       name = data.messageName || data.message;
 
-      console.log('Published page received message: ', origin);
+      console.log('published page received message from: ', origin);
 
-      // only handle messages with our key
-      if (name === svc.MESSAGE_NAME) {
-        meta = data.data;
-
-        // dispatch message
-        switch (meta.type) {
-          case 'pf-edit-mode':
-            svc.toggleEditMode(meta.data);
-            break;
-          case 'pf-image-resp':
-            svc.handlePhonegapImage(meta.data);
-            break;
-        }
-      }
+      // move message along...
+      dispatchMessage(name, data);
     }
   }
 
-  // listen for window.postmessages
+  /**
+   * Listen for messages from parent page (via window.postmessage)
+   */
   function setupWindowMessageListener() {
     if (window.addEventListener) {
       window.addEventListener('message', onMessageReceived, false);
