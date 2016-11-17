@@ -23,7 +23,7 @@ var PercEditor = (function () {
   function setColors() {
     $.each(colors, function (index, color) {
       setTimeout(function () {
-        editableItem.css({ 'background': color });
+        editableItem.css({'background': color});
       }, 90 * index);
     });
   }
@@ -34,17 +34,6 @@ var PercEditor = (function () {
         selector: '.e',
         inline: true,
         //fixed_toolbar_container: '.tinymceToolbarHolder',
-        theme_advanced_toolbar_location : "external",
-        theme_advanced_toolbar_align : "left",
-        theme_advanced_statusbar_location : "top",
-        theme_advanced_resizing : false,
-        // make toolbar dragable
-        handle_event_callback : function(e) {
-          if(e.type == 'click') {
-            $('.mceExternalToolbar').draggable();
-          }
-          return true;
-        },
         browser_spellcheck: true,
         menubar: 'edit format insert table',
         edit: {
@@ -70,25 +59,6 @@ var PercEditor = (function () {
         ]
       });
 
-<<<<<<< Updated upstream
-    tinymce.init({
-      selector: '.e',
-      inline: true,
-      plugins: [
-        'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-        'searchreplace wordcount visualblocks visualchars code fullscreen',
-        'insertdatetime media nonbreaking save table contextmenu directionality',
-        'emoticons template paste textcolor colorpicker textpattern imagetools codesample pgImage'
-      ],
-      toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-      toolbar2: 'print preview media | forecolor backcolor emoticons | codesample | pgImage',
-      image_advtab: true,
-      templates: [
-        { title: 'Test template 1', content: 'Test 1' },
-        { title: 'Test template 2', content: 'Test 2' }
-      ]
-    });
-=======
     } else {
       tinymce.init({
         selector: '.e',
@@ -110,7 +80,6 @@ var PercEditor = (function () {
         ]
       });
     }
->>>>>>> Stashed changes
   }
 
   tinymce.PluginManager.add('moreBttn', function (editor) {
@@ -130,7 +99,7 @@ var PercEditor = (function () {
     });
   });
 
-// == Public Methods =====================
+  // == Public Methods =====================
 
   svc.toggleEditMode = function (inEditMode) {
     editableItem = $('*:hasAttrWithPrefix(' + attr + ')')
@@ -144,36 +113,7 @@ var PercEditor = (function () {
 
       $(editableItem).addClass('e');
       $(editableItem).attr('contenteditable', 'true');
-      //$('#editable_region').attr('contenteditable', 'true');
 
-<<<<<<< Updated upstream
-      setEditors();
-
-      $(editableItem).each(function () {
-        var originalText = $(this).html(),
-          item = $(this);
-        $(item).one('focus', function () {
-          var itemContainer = $(this).parent().attr(attr),
-            beingEdited = $(this)[0].tagName.toLocaleLowerCase(),
-            originalText = $(this).html();
-          console.log(itemContainer + '\'s ' + beingEdited + ' is being edited. The original value is ' + originalText);
-        });
-        $(item).on('blur', function () {
-          var itemContainer = $(this).parent().attr(attr),
-            edited = $(this)[0].tagName.toLocaleLowerCase(),
-            itemEdited = itemContainer + ": " + edited,
-            newText = $(this).html();
-          if (newText !== originalText) {
-            var editMsg = itemContainer + '\'s ' + edited + ' was edited. The original value was ' + originalText + ' The new value is ' + newText;
-            console.log(editMsg);
-            localStorage.setItem(itemEdited, newText);
-            svc.sendMessage(editMsg);
-          } else {
-            console.log(itemContainer + '\'s ' + edited + ' was not changed');
-          }
-        });
-      });
-=======
       $(editableItem).one('focus', function () {
         var oldVal = $(this).html();
         $(this).on('blur', function () {
@@ -185,23 +125,18 @@ var PercEditor = (function () {
         })
       });
 
-
-
-      //textboxio.inlineAll('.e');
-
       setEditors(editableItem);
 
->>>>>>> Stashed changes
     } else {
       // turn off editing
-      $(editableItem).removeClass('.e');
+      $(editableItem).removeClass('e');
       $(editableItem).removeAttr('contenteditable');
       tinymce.EditorManager.editors = [];
     }
   };
 
   svc.handlePhonegapImage = function (imageData) {
-    svc.trigger(document, svc.CUSTOM_EVENT_NAME, { type: 'pc-image-resp', data: imageData });
+    svc.trigger(document, svc.CUSTOM_EVENT_NAME, {type: 'pc-image-resp', data: imageData});
   };
 
   svc.handlePublish = function () {
@@ -220,9 +155,8 @@ var PercEditor = (function () {
     svc.sendMessage('perc-log-pub', editsToSend);
   };
 
-// == Private Methods ====================
+  // == Private Methods ====================
 
-<<<<<<< Updated upstream
   // perc alerts
   jQuery.fn.extend({
     alert: function (title, message) {
@@ -239,10 +173,7 @@ var PercEditor = (function () {
     }
   });
 
-  // find all attrs with certain prefix
-=======
 // find all attrs with certain prefix
->>>>>>> Stashed changes
   $.expr[':'].hasAttrWithPrefix = $.expr.createPseudo(function (prefix) {
     return function (obj) {
       for (var i = 0; i < obj.attributes.length; i++) {
@@ -252,7 +183,7 @@ var PercEditor = (function () {
     };
   });
 
-// export public methods/variables
+  // export public methods/variables
   return svc;
 
 })();

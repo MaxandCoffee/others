@@ -12,14 +12,8 @@
     <link rel="stylesheet" href="/css/perc-editor.css" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-<<<<<<< Updated upstream
-  <script src="//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-=======
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-
->>>>>>> Stashed changes
     <![endif]-->
   {{#if ENV_DEVELOPMENT}}
       <script src="http://localhost:35729/livereload.js"></script>
@@ -44,14 +38,19 @@
 <!-- TINY-MCE -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.4.3/tinymce.min.js"></script>
 <!-- OUR SCRIPTS -->
-<<<<<<< Updated upstream
-<script src="js/perc-adv-image.js"></script>
-=======
-<script src="js/ckeditor/ckeditor.js"></script>
 <script src="js/pg-image.js"></script>
->>>>>>> Stashed changes
 <script src="js/perc-editor.js"></script>
 <script src="js/perc-editor-service.js"></script>
 <script>PercEditorService.init()</script>
+<script type="text/template" id="pg-image-plugin">
+    <div class="pg-image-container">
+        <div class="pg-image-left">
+            <button class="pg-image-button" type="button" name="pg-image-btn">Click</button>
+        </div>
+        <div class="pg-image-right">
+            <img class="pg-image-image" />
+        </div>
+    </div>
+</script>
 </body>
 </html>

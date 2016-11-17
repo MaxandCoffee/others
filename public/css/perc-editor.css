@@ -12,7 +12,33 @@
   display: none;
 }
 
-<<<<<<< Updated upstream
+.mce-tinymce,
+.mce-tinymce-inline,
+.mce-container,
+.mce-panel,
+.mce-floatpanel{
+  display: flex;
+  flex-wrap: wrap !important;
+  margin: auto !important;
+}
+
+.displayToolbars{
+  height: 99px !important;
+}
+
+@media all and (max-width: 504px) {
+  .mce-tinymce.mce-tinymce-inline.mce-container.mce-panel.mce-floatpanel{
+    overflow: visible !important;
+    position: absolute !important;
+    left: 50% !important;
+    margin-left: -150px !important;
+  }
+  .mce-stack-layout-item:last-child{
+    display: none;
+  }
+
+}
+
 /* == Perc Alerts ==========*/
 .perc-alert {
   display: none;
@@ -65,47 +91,3 @@
 .perc-alert.perc-alert-danger strong {
   color: #a94442;
 }
-
-
-
-=======
-/*.tinymceToolbarHolder{*/
-  /*padding: 0;*/
-  /*margin: 0;*/
-  /*text-align: center;*/
-  /*display: flex;*/
-  /*position: fixed;*/
-  /*left: 0;*/
-  /*!*top: 0;*!*/
-  /*bottom: 0;*/
-  /*width: 100vw;*/
-  /*z-index: 2;*/
-/*}*/
-.mce-tinymce,
-.mce-tinymce-inline,
-.mce-container,
-.mce-panel,
-.mce-floatpanel{
-  display: flex;
-  flex-wrap: wrap !important;
-  margin: auto !important;
-}
-
-.displayToolbars{
-  height: 99px !important;
-}
-
-@media all and (max-width: 504px) {
-  .mce-tinymce.mce-tinymce-inline.mce-container.mce-panel.mce-floatpanel{
-    overflow: visible !important;
-    position: absolute !important;
-    left: 50% !important;
-    margin-left: -150px !important;
-  }
-  .mce-stack-layout-item:last-child{
-    display: none;
-  }
-
-}
-
->>>>>>> Stashed changes
