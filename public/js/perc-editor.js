@@ -55,7 +55,7 @@ var PercEditor = (function () {
           'advlist autolink lists link image charmap print preview hr anchor pagebreak',
           'searchreplace wordcount visualblocks visualchars code fullscreen',
           'insertdatetime media nonbreaking save table contextmenu directionality moreBttn',
-          'emoticons template paste textcolor colorpicker textpattern imagetools codesample pgImage'
+          'emoticons template paste textcolor colorpicker textpattern imagetools codesample percAdvImage'
         ]
       });
 
@@ -72,7 +72,7 @@ var PercEditor = (function () {
           'autoresize'
         ],
         toolbar: ['insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-          'print preview media | forecolor backcolor emoticons | codesample | pgImage'],
+          'print preview media | forecolor backcolor emoticons | codesample | percAdvImage'],
         image_advtab: true,
         templates: [
           {title: 'Test template 1', content: 'Test 1'},
