@@ -11,3 +11,101 @@
 #editsToSend {
   display: none;
 }
+
+<<<<<<< Updated upstream
+/* == Perc Alerts ==========*/
+.perc-alert {
+  display: none;
+  padding: 15px !important;
+  margin-bottom: 20px !important;
+  border: 1px solid transparent !important;
+  border-radius: 4px !important;
+}
+
+.perc-alert strong {
+  font-weight: 700;
+}
+
+.perc-alert.perc-alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+
+.perc-alert.perc-alert-success {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.perc-alert.perc-alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+
+.perc-alert.perc-alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+.perc-alert.perc-alert-info strong {
+  color: #31708f;
+}
+
+.perc-alert.perc-alert-success strong {
+  color: #3c763d;
+}
+
+.perc-alert.perc-alert-warning strong {
+  color: #8a6d3b;
+}
+
+.perc-alert.perc-alert-danger strong {
+  color: #a94442;
+}
+
+
+
+=======
+/*.tinymceToolbarHolder{*/
+  /*padding: 0;*/
+  /*margin: 0;*/
+  /*text-align: center;*/
+  /*display: flex;*/
+  /*position: fixed;*/
+  /*left: 0;*/
+  /*!*top: 0;*!*/
+  /*bottom: 0;*/
+  /*width: 100vw;*/
+  /*z-index: 2;*/
+/*}*/
+.mce-tinymce,
+.mce-tinymce-inline,
+.mce-container,
+.mce-panel,
+.mce-floatpanel{
+  display: flex;
+  flex-wrap: wrap !important;
+  margin: auto !important;
+}
+
+.displayToolbars{
+  height: 99px !important;
+}
+
+@media all and (max-width: 504px) {
+  .mce-tinymce.mce-tinymce-inline.mce-container.mce-panel.mce-floatpanel{
+    overflow: visible !important;
+    position: absolute !important;
+    left: 50% !important;
+    margin-left: -150px !important;
+  }
+  .mce-stack-layout-item:last-child{
+    display: none;
+  }
+
+}
+
+>>>>>>> Stashed changes
