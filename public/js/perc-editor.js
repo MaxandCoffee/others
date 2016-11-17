@@ -131,7 +131,6 @@ var PercEditor = (function () {
       // turn off editing
       $(editableItem).removeClass('e');
       $(editableItem).removeAttr('contenteditable');
-      tinymce.EditorManager.editors = [];
     }
   };
 
